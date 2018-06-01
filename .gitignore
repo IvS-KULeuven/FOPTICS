@@ -1,0 +1,24 @@
+
+# Compiled source 
+
+*.pyc
+*.class
+*.dll
+*.exe
+*.o
+*.so
+*.mode
+
+
+# Logs and databases
+
+*.log
+*.sql
+*.sqlite
+*.swp
+
+# OSX generated files
+
+.DS_Store*
+Icon?
+Thumbs.db
