@@ -2,9 +2,9 @@ FF = gfortran
 FLAG = -c -ffree-line-length-512
 BDIR = .
 
-all: $(BDIR)/foptics Makefile
+all: $(BDIR)/foptics Makefile_FOPTICS
 
-$(BDIR)/foptics: foptics_module.o foptics_main.o foptics_input.o optics.o ComputeEpsilonCoreDistance.o D_rnkpar.o ComputeReachabilityDistanceAddSeed.o Makefile
+$(BDIR)/foptics: foptics_module.o foptics_main.o foptics_input.o optics.o ComputeEpsilonCoreDistance.o D_rnkpar.o ComputeReachabilityDistanceAddSeed.o Makefile_FOPTICS
 	$(FF)  -o $(BDIR)/foptics *.o
 
 foptics_module.o: foptics_module.f90 
