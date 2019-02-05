@@ -1,6 +1,6 @@
 ## Light curve analysis and parametrisation; stellar variability unsupervised classification
 
-A bunch of software packages for detailed analysis of time series of stellar brightness variations (=light curves) by means of the Lomb-Scargle periodogram; parametric description of light curves throung a set of features (=attributes) that can further be used for unsupervised classification according to the type of stellar variability
+A bunch of software packages for detailed analysis of time series of stellar brightness variations (=light curves) by means of the Lomb-Scargle periodogram; parametric description of light curves through a set of features (=attributes) that can further be used for unsupervised classification according to the type of stellar variability
 
 ### Light curve analysis and parametrisation
 
