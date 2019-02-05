@@ -1,0 +1,28 @@
+FF = gfortran
+FLAG = -c -ffree-line-length-512
+BDIR = .
+
+all: $(BDIR)/AttributeTransformation Makefile_AttTrans
+
+$(BDIR)/AttributeTransformation: AttributeTransformation_Module.o AttributeTransformation_Input.o AttributeTransformation_Transform.o AttributeTransformation_Output.o AttributeTransformation_Main.o Makefile_AttTrans
+	$(FF)  -o $(BDIR)/AttributeTransformation *.o
+
+AttributeTransformation_Module.o: AttributeTransformation_Module.f90
+	$(FF)  $(FLAG) AttributeTransformation_Module.f90
+
+AttributeTransformation_Input.o: AttributeTransformation_Input.f90
+	$(FF)  $(FLAG) AttributeTransformation_Input.f90
+
+AttributeTransformation_Output.o: AttributeTransformation_Output.f90
+	$(FF)  $(FLAG) AttributeTransformation_Output.f90
+
+AttributeTransformation_Transform.o: AttributeTransformation_Transform.f90
+	$(FF)  $(FLAG) AttributeTransformation_Transform.f90
+	
+AttributeTransformation_Main.o: AttributeTransformation_Main.f90
+	$(FF)  $(FLAG) AttributeTransformation_Main.f90
+	
+clean:
+	@rm -f *.o
+	@rm -f *.mod
+	@rm -f AttributeTransformation

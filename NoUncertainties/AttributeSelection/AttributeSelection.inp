@@ -1,0 +1,5 @@
+/Users/andrew/Fortran_codes/FOPTICS/FOPTICS_chain/Attribute_transformation/WORKDIR/Kepler_gammaDors_Binaries/ ! Input directory
+/Users/andrew/Fortran_codes/FOPTICS/FOPTICS_chain/AttributeSelection/WORKDIR/Kepler_gammaDors_Binaries/ ! Output directory
+dat ! light curve file name extension
+75 2 ! Number of input and selected (in this order) attributes
+71 68 ! Attribute indices 
