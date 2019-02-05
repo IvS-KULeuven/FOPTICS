@@ -8,6 +8,7 @@
 *.o
 *.so
 *.mode
+*.mod
 
 
 # Logs and databases
