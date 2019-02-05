@@ -1,25 +1,12 @@
-## FOPTICS: Hierarchical Density-Based Clustering of Uncertain Data
+## Software package for parameterisation of stellar light curves and classification of stars according to type of their variability by means of unsupervised clustering algorithm
 
-### Installation
+### Light curve analysis and parametrisation
 
-- Execute `make clean` on the command line
-- Execute `make` on the command line
-- An executable 'foptics' will be produced in the same folder as the Makefile
+Two implementations are available up until now:
 
-### How to run 
+- `NoUncertainties`: each light curve is parameterised through a sequence of features that are further used for classification by means of the FOPTICS clustering algorithm. Classification features have no uncertainties assigned to them in this particular implementation (standard practice in classification business)
+- `Uncertainties`: each data point of a given light curve is perturbed within the uncertainties claimed for that data point. The result is a perturbed light curve and the number of such perturbations, N, is to be defined by the user. The net result is that each stellar object is assigned N perturbed light curves which are in turn parametrised the same way as in the `NoUncertainties` case. This allows to assign uncertainties to classification features and the clustering algorithm takes these uncertainties into account during the classification process. This particular implementation has two options, single- and multi-CPU running mode, where parallelisation is realised by means of OpenMPI.
 
-`/foptics arg1 arg2 arg3 arg4 arg5`
+### FOPTICS: Hierarchical Density-Based Clustering of Uncertain Data
 
-where
-
-- arg1: the input directory (e.g., InputDirectory/). This directory contains files with object IDs and attributes
-- arg2: the output file where the object order, object ID, and reachability distance (in this order) are stored (e.g., OutputFile.txt)
-- arg3: the number of attributes to be used (e.g., 7)
-- arg4: the value of undefined distance (any large number, e.g., 99)
-- arg5: the minimum number of objects in the neighbourhood (e.g., 30)
-
-### References
-
-- How to reference this code: TBW
-- Ankerst et al., 1999, *OPTICS: Ordering points to identify the clustering structure*
-- Kriegel H.-P. and Pfeifle M., 2005, *Hierarchical density-based clustering of uncertain data*
+Unsupervised clustering classification algorithm that assigns stellar objects to a particular class of variable stars by using light curve parameterisation (with or without uncertainties) as an input.
