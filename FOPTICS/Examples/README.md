@@ -1,0 +1,8 @@
+## Examples of the FOPTICS application
+
+A few examples of application of the clustering algorithm to both simulated and real data. In each case, input list with attributes (`*.dat` file) is provided along with the plot illustrating particular data set. The reachability diagram plot is included along with the numerical values provided in a separate (`*.fo`) data file to demonstrate output of the algorithm.
+
+- `RectangularFourClustersWithBackground`: an example of four (rectangular in shape) artificial clusters in 2D parameter space with a total of 700 data points. On top of that, 2000 data points are added to simulate the effect of background.
+- `GaussianSevenClustersWithBackground`: an example of seven (skewed Gaussian in shape) artificial clusters in 2D parameter space with a total of 2500 data points. On top of that, 2000 data points are added to simulate the effect of background.
+- `SimulatedBinariesGammaDor`: an example of simulated light curves of three morphologically different types of eclipsing binary stars (300 objects in total) and a group of gravity-mode pulsators (500 objects in total). The three types of binaries are: W UMa type (100 objects), Algol type (100 objects), and detached binaries (100 objects). No background has been added.
+- `KeplerBinariesGammaDor`: an example of real Kepler light curves of some 70 well-studies gamma Dor-type pulsators (taken from Van Reeth et al. 2015, ApJS, 218, 27) and some 50 eclipsing binaries randomly selected from the Eclipsing Binary Catalogue (http://keplerebs.villanova.edu)

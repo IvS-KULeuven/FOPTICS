@@ -10,12 +10,6 @@
 *.mode
 *.mod
 
-# Work results
-
-*.dat
-*.times
-*.fo
-
 # Logs and databases
 
 *.log

@@ -1,25 +1,7 @@
 ## FOPTICS: Hierarchical Density-Based Clustering of Uncertain Data
 
-### Installation
+Both the source code and a few examples of running the FOPTICS algorithm on simulated and real data are provided. Examples include:
 
-- Execute `make clean -f Makefile_FOPTICS` on the command line
-- Execute `make -f Makefile_FOPTICS` on the command line
-- An executable 'foptics' will be produced in the same folder as the Makefile
-
-### How to run 
-
-`/foptics arg1 arg2 arg3 arg4 arg5`
-
-where
-
-- arg1: the input directory (e.g., InputDirectory/). This directory contains files with object IDs and attributes
-- arg2: the output file where the final (column 1) and original (column 2) object order, object ID (column 3), reachability distance (column 4), and normalised reachability distance (column 5) are stored (e.g., OutputFile.txt). Reachability diagram is simply a plot of the final object order (column 1) versus normalised reachability distance (column 5). 
-- arg3: the number of attributes to be used (e.g., 2)
-- arg4: the value of undefined distance (any large number, e.g., 1)
-- arg5: the minimum number of objects in the neighbourhood (e.g., 20)
-
-### References
-
-- How to reference this code: TBW
-- Ankerst et al., 1999, *OPTICS: Ordering points to identify the clustering structure*
-- Kriegel H.-P. and Pfeifle M., 2005, *Hierarchical density-based clustering of uncertain data*
+- simulated attributes in 2D parameter space that are directly passed to the algorithm for clustering purposes; these examples are not directly related to stellar astrophysics, instead just illustrate performance of the algorithm for (close to) ideal cases.
+- simulated light curves of eclipsing binaries and gravity-mode pulsators. This is a realistic astrophysical example where the light curves are first analysed by means of the Lomb-Scargle periodogram, the corresponding Fourier coefficients are transformed into classification attributes that are ultimately passed to the FOPTICS algorithm for classification.
+- Kepler light curves of some 70 well-characterised gamma Dor-type pulsators and some 50 eclipsing binaries randomly selected from the Kepler Eclipsing Binary Catalogue. The analysis sequence is just the same as for the simulated light curves above.

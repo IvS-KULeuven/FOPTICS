@@ -15,3 +15,12 @@ No light curve perturbation is possible in this implementation, hence feature un
 ### Running
 
 To run the module of interest, execute `./executable_name config_file` on the command line. For example, light curve analysis module is ran with the `./LCAnalysis LightCurveAnalysis.config` assuming configuration file is in the same folder with the binary file (otherwise, path to the configuration file has to be included).
+
+### Examples
+
+A couple of data sets are provided as examples (see the directory of the same name) to run the light curve analysis and attribute calculation codes. These are:
+
+- `SimulatedBinariesGammaDor`: simulated light curves of a total of 300 eclipsing binaries and 500 gamma Dor-type pulsators.
+- `KeplerBinariesGammaDor`: Kepler light curves of some 70 gamma Dor-type pulsators from Van Reeth et al. (2015, ApJS, 2018, 27) and some 50 eclipsing binaries randomly selected from the Kepler Eclipsing Binary Catalogue.
+
+By executing the entire sequence `Light_Curve_Analysis` --> `Attribute_transformation` --> `AttributeSelection` on either of these data sets, an input list of attributes required for classification with the FOPTICS algorithm will be obtained. These lists are made available in the `Examples` folder accompanying the FOPTICS sources.
