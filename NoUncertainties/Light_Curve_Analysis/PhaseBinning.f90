@@ -20,9 +20,9 @@ FluxBinnedMean = sum(FluxBinned, MASK=FluxBinned/=0.d0)/real(NumberBins,8) ! Com
 
 do i = 1, NumberBins ! Loop over the number of phase bins
  if(FluxBinned(i) /= 0) then ! When the bin is not empty
-  FluxBinned(i) = -FluxBinned(i)/NumberPointsPerBin(i) ! Compute flux in that bin 
+  FluxBinned(i) = FluxBinned(i)/NumberPointsPerBin(i) ! Compute flux in that bin 
  else ! When the bin is empty
-  FluxBinned(i) = -FluxBinnedMean ! Set the flux to the mean value
+  FluxBinned(i) = FluxBinnedMean ! Set the flux to the mean value
  endif
 enddo
 
@@ -37,7 +37,7 @@ if(iprint == 1) then ! Saving un-binned phase curve into a file
  do it = 1, ntimes ! Loop over the number of light curve data points
   phase(it) = phase(it) - BinMinimumPhaseValue ! Do the same what we have done for the binned phase curve but this time for the un-binned data
   if(phase(it) < 0.d0) phase(it) = phase(it) + 1.d0
-  write(60,*) phase(it), -flux_detrended(it)
+  write(60,*) phase(it), flux_detrended(it)
  enddo
 endif
 

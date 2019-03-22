@@ -55,7 +55,12 @@ write(AmplDir,"(a,'amplitudeSpectra/')") trim(adjustl(OutDir)) ! Full path to di
 arg = ' '; write(arg,"('mkdir -p ',a)") trim(adjustl(AmplDir))
 ios = system(trim(adjustl(arg))) ! Create directory that will contain amplitude spectra
 
-arg = ' '; write(arg,"('ls ',a,'*.',a,' > lightCurveFilenames')") trim(adjustl(DataDir)), trim(adjustl(FileExt)) ! Get light curve file names
+write(LightDir,"(a,'lightCurves/')") trim(adjustl(OutDir)) ! Full path to directory with amplitude spectra
+arg = ' '; write(arg,"('mkdir -p ',a)") trim(adjustl(LightDir))
+ios = system(trim(adjustl(arg))) ! Create directory that will contain amplitude spectra
+
+k = 0; k = index(DataDir,'/',back=.true.)
+arg = ' '; write(arg,"('find ',a,' -maxdepth 1 -type f > lightCurveFilenames')") trim(adjustl(DataDir(1:k-1))) ! Get light curve file names
 ios = system(trim(adjustl(arg))) ! Execute prompt command
 
 open(10,file='lightCurveFilenames',status='old',iostat=ios) ! Open file
