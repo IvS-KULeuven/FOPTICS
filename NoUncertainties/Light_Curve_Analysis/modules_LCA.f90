@@ -1,6 +1,6 @@
 module input_output ! Module containing all kinds of input information
 
-character(500) DataDir, OutDir, WorkDir, PhaseDir, AmplDir, RunName
+character(500) DataDir, OutDir, WorkDir, PhaseDir, AmplDir, LightDir, RunName
 character(500), allocatable :: LightCurveFiles(:), PhasePlotFiles(:), AmplitudeSpectraFiles(:)
 integer number_LightCurves
 

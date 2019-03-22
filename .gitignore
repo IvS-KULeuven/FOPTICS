@@ -10,6 +10,11 @@
 *.mode
 *.mod
 
+# Temporary and results folders
+
+WORKDIR/
+PlotScripts/
+
 # Logs and databases
 
 *.log
