@@ -77,17 +77,3 @@ Example for 3 frequencies and 4 harmonics:
 41)P-value of F-test on variance difference due to subtraction of fit with 4 harmonics of Freq1 (probability) 
 42)P-value of F-test on variance difference due to subtraction of fit with 4 harmonics of Freq2 (probability) 
 43)P-value of F-test on variance difference due to subtraction of fit with 4 harmonics of Freq3 (probability)
-
-allocate(difference(number_wavelength_observed))
-variance = 0.d0; diff_mean = 0.d0
-do iwl = 1, number_wavelength_observed-1
- difference(iwl) = flux_observed(iwl+1) - flux_observed(iwl)
- diff_mean = diff_mean + difference(iwl)
-enddo
-diff_mean = diff_mean/dfloat(number_wavelength_observed-1)
-do iwl = 1, number_wavelength_observed-1
- variance = variance + (difference(iwl) - diff_mean)**2.d0
-enddo
-variance = variance/dfloat(number_wavelength_observed-1)
-sigma = dsqrt(variance*0.5d0); sigma = sigma*sigma
-deallocate(difference)
