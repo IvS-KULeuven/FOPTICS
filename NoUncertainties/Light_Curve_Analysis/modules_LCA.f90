@@ -15,7 +15,7 @@ character(100) LightCurveUnits
 real(8), allocatable :: times(:), flux(:), weights(:), Variance(:), flux_detrended(:), BinCenters(:)
 real(8) TotalTimeSpan, FrequencyResolution, FluxRawMean, VarianceRaw, FluxDetrendedMean, VarianceDetrended, NyquistFrequency, FrequencyStep
 integer ntimes, NumberFrequencies
-integer, parameter :: NumberBins = 64
+integer, parameter :: NumberBins = 60
 
 end module 
 

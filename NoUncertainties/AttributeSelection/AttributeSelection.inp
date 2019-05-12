@@ -1,5 +1,5 @@
-/Users/andrew/Fortran_codes/FOPTICS/FOPTICS/NoUncertainties/Attribute_transformation/WORKDIR/KeplerTrainingSetDetrended/ ! Input directory
-/Users/andrew/Fortran_codes/FOPTICS/FOPTICS/NoUncertainties/AttributeSelection/WORKDIR/KeplerTrainingSetDetrended/ ! Output directory
+/Users/andrew/Fortran_codes/FOPTICS/FOPTICS/NoUncertainties/Attribute_transformation/WORKDIR/temp/ ! Input directory
+/Users/andrew/Fortran_codes/FOPTICS/FOPTICS/NoUncertainties/AttributeSelection/WORKDIR/temp/ ! Output directory
 txt ! light curve file name extension
-75 2 ! Number of input and selected (in this order) attributes
-71 68 ! Attribute indices 
+79 2 ! Number of input and selected (in this order) attributes
+4 70 ! Attribute indices 

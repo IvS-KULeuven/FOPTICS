@@ -9,6 +9,7 @@ integer temp(1)
 character(500) arg, arg1
 
 call input ! Subroutine that organises a flow of input information
+!write(100,"('light curve   time mean   time median   phase mean   phase median')")
 
 do m = 1, number_LightCurves ! Loop over the number of light curves
  open(60,file=trim(adjustl(LightCurveFiles(m))),status='old',iostat=ios) ! Open a light curve file and check whether it exists
@@ -45,14 +46,17 @@ do m = 1, number_LightCurves ! Loop over the number of light curves
  if(ndeg /= 0) call Subtract_Polynomial ! Detrend the data by fitting and subtracting a polynomial (the flux array will be changed)
  flux_detrended = flux ! Store detrended flux in a separate array (will be used for a phase plot at the end)
  
+ NumberZeroCrossings = 0 ! Number of zero crossings counter initiation
  open(60,file=trim(adjustl(arg1))) ! Detrended light curve
  do ii = 1, ntimes
   write(60,*) times(ii), flux(ii)
+  if(ii /= 1) then ! compute number of zero crossings
+   if((flux(ii) < 0.d0 .and. flux(ii-1) > 0.d0) .or. (flux(ii) > 0.d0 .and. flux(ii-1) < 0.d0)) NumberZeroCrossings = NumberZeroCrossings + 1
+  endif
  enddo
  close(60)
 
  call Compute_skewness(flux,ntimes,Skewness_time_mean,Skewness_time_median) ! Compute skewness
- write(*,*) skewness_time_mean, skewness_time_median
  
  NumberFrequencies = dint((NyquistFrequency - FrequencyResolution)/FrequencyStep) + 1 ! Total number of frequencies
  allocate(Variance(NumberFrequenciesExtract+1),FrequenciesExtracted(NumberFrequenciesExtract),FittingCoefficientsPerFrequency(NumberFrequenciesExtract,TwiceNumberHarmonics)) ! Allocate variance array
@@ -106,14 +110,15 @@ do m = 1, number_LightCurves ! Loop over the number of light curves
   FrequencyProbability(ifr+1) = prob ! 1st frequency subtracted vs. original detrended, 2nd frequency subtracted vs. 1st frequency subtracted, etc.
  enddo
  
- call PhasePlot(m,skewness_phase) ! Make a phase plot for the dominant frequency and save it into a file
+! call PhasePlot(m,skewness_phase_mean,skewness_phase_median,theta) ! Make a phase plot for the dominant frequency and save it into a file
+call PhasePlot(m,skewness_phase_mean,skewness_phase_median) ! Make a phase plot for the dominant frequency and save it into a file
  
  write(10,fmt="(a,'   0.00000000     0.00000000  ',1000(f16.8,1x))") trim(adjustl(LightCurveFiles(m))), (FrequenciesExtracted(i), i = 1, NumberFrequenciesExtract), & ! Output
           FittingCoefficientsPerFrequency(1,1), (FittingCoefficientsPerFrequency(i,2:NumberHarmonics+1), i = 1, NumberFrequenciesExtract), &
           (FittingCoefficientsPerFrequency(i,NumberHarmonics+2:TwiceNumberHarmonics), i = 1, NumberFrequenciesExtract), (Variance(i), i = 1, NumberFrequenciesExtract+1), &
 !          Variance(2)/Variance(1), (1.d0 - Variance(NumberFrequenciesExtract+1)/Variance(1)), VarianceReduction, skewness_time, skewness_phase, (FrequencyProbability(i), i = 1, NumberFrequenciesExtract+1)
-          Variance(2)/Variance(1), (1.d0 - Variance(NumberFrequenciesExtract+1)/Variance(1)), skewness_time_mean, (FrequencyProbability(i), i = 1, NumberFrequenciesExtract+1)
- 
+          Variance(2)/Variance(1), (1.d0 - Variance(NumberFrequenciesExtract+1)/Variance(1)), skewness_time_mean, real(NumberZeroCrossings,8), (FrequencyProbability(i), i = 1, NumberFrequenciesExtract+1) 
+! write(100,"(a,1x,1000(f16.8,1x))") trim(adjustl(LightCurveFiles(m))), skewness_time_mean, skewness_time_median, skewness_phase_mean, skewness_phase_median
  write(*,"('Light curve ',a,' has been processed')") trim(adjustl(LightCurveFiles(m))) ! Print some info
  deallocate(times,flux,flux_detrended,weights,Variance,FrequenciesExtracted,FittingCoefficientsPerFrequency,FrequencyProbability)
  deallocate(SS,SC,SS2,SC2,F1,PS,S0N,C0N,DEN,SDFN,CDFN)
