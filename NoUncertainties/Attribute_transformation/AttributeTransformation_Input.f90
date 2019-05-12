@@ -23,8 +23,8 @@ read(1,*) NumberFrequencies, NumberHarmonics ! Get number of frequencies and har
 close(1)
 
 NumberProbabilityValues = NumberFrequencies + 1 ! Number of probability values
-NumberLightCurveParameters = 2*(NumberFrequencies + 1) + 2*(NumberFrequencies*NumberHarmonics) + 5 ! Number of light curve parameters in the input file
-NumberAttributes = NumberFrequencies + 2*NumberFrequencies*NumberHarmonics + 8 ! Number of attributes to be computed
+NumberLightCurveParameters = 2*(NumberFrequencies + 1) + 2*(NumberFrequencies*NumberHarmonics) + 6 ! Number of light curve parameters in the input file
+NumberAttributes = 2*NumberFrequencies + 2*NumberFrequencies*NumberHarmonics + 9 ! Number of attributes to be computed
 
 open(1,file=trim(adjustl(input_file)),status='old',iostat=ios) ! Open file with the light curve parameters and check for possible error (e.g., file does not exist)
 if(ios /= 0) then

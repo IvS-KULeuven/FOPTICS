@@ -15,6 +15,14 @@ integer MinimumLocation(1), MaximumLocation(1)
 
 if(ifreq == 1) then ! We do this for the dominant extracted frequency only
 
+! call PhaseBinning(FrequenciesExtracted(ifreq),BinCentersPerFrequency,FluxBinnedPerFrequency,BinMinimumFluxValuePrimary,0,theta1) ! Phase bin the data according to half the extracted frequency
+! theta1 = theta1/Variance(ifreq)
+! call PhaseBinning(FrequenciesExtracted(ifreq)*0.5d0,BinCentersPerFrequency,FluxBinnedPerFrequency,BinMinimumFluxValuePrimary,0,theta2) ! Phase bin the data according to half the extracted frequency
+! theta2 = theta2/Variance(ifreq)
+! if(theta2 < theta1) FrequenciesExtracted(ifreq) = FrequenciesExtracted(ifreq)*0.5d0
+! write(*,*) theta1, theta2
+ 
+! call PhaseBinning(FrequenciesExtracted(ifreq)*0.5d0,BinCentersPerFrequency,FluxBinnedPerFrequency,BinMinimumFluxValuePrimary,0,theta) ! Phase bin the data according to half the extracted frequency
  call PhaseBinning(FrequenciesExtracted(ifreq)*0.5d0,BinCentersPerFrequency,FluxBinnedPerFrequency,BinMinimumFluxValuePrimary,0) ! Phase bin the data according to half the extracted frequency
 
 ! Identify array indicies corresponding to the 0.45 - 0.55 range in phase 

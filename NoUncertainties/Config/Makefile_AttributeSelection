@@ -9,3 +9,8 @@ $(BDIR)/AttributeSelection: AttributeSelection.o Makefile_AttributeSelection
 
 AttributeSelection.o: AttributeSelection.f90 
 	$(FF)  $(FLAG) AttributeSelection.f90
+
+clean:
+	@rm -f *.o
+	@rm -f *.mod
+	@rm -f AttributeSelection	    

@@ -1,4 +1,4 @@
-Total number of light curve parameters that will be computed amounts to 3*(Number of frequencies + 1) + 2*(Number of frequencies * Number of harmonics) + 3. Three extra columns are added to the input file, namely light curve file name followed by two zeros.
+Total number of light curve parameters that will be computed amounts to 3*(Number of frequencies + 1) + 2*(Number of frequencies * Number of harmonics) + 4. Three extra columns are added to the input file, namely light curve file name followed by two zeros.
 
 The light curve parameters computed are (general case):
 
@@ -26,6 +26,7 @@ The light curve parameters computed are (general case):
 * Ratio of the variance after, to the variance before subtraction of least-squares fit with NumberHarmonics harmonics of Freq1 (no units)
 * Final variance reduction due to subtraction of all the periodic signals (no units, values close to 1 if the fit is good, close to 0 if the fit is poor)
 * Skewness in time domain
+* Number of zero crossings in time domain
 * P-value of F-test on variance difference due to subtraction of linear trend (probability)
 * do i = 1, NumberFrequencies
    P-value(i) (magnitude^2) ! P-value of F-test on variance difference due to subtraction of fit with NumberHarmonics harmonics of the frequency in question
@@ -71,7 +72,22 @@ Example for 3 frequencies and 4 harmonics:
 36)Ratio of the variance after, to the variance before subtraction of least-squares fit with 4 harmonics of Freq1 (no units)
 37)Final variance reduction due to subtraction of all the periodic signals (no units, values close to 1 if the fit is good, close to 0 if the fit is poor)
 38)Skewness_time
-39)P-value of F-test on variance difference due to subtraction of linear trend (probability)
-40)P-value of F-test on variance difference due to subtraction of fit with 4 harmonics of Freq1 (probability) 
-41)P-value of F-test on variance difference due to subtraction of fit with 4 harmonics of Freq2 (probability) 
-42)P-value of F-test on variance difference due to subtraction of fit with 4 harmonics of Freq3 (probability)
+39)NumberZeroCrossings
+40)P-value of F-test on variance difference due to subtraction of linear trend (probability)
+41)P-value of F-test on variance difference due to subtraction of fit with 4 harmonics of Freq1 (probability) 
+42)P-value of F-test on variance difference due to subtraction of fit with 4 harmonics of Freq2 (probability) 
+43)P-value of F-test on variance difference due to subtraction of fit with 4 harmonics of Freq3 (probability)
+
+allocate(difference(number_wavelength_observed))
+variance = 0.d0; diff_mean = 0.d0
+do iwl = 1, number_wavelength_observed-1
+ difference(iwl) = flux_observed(iwl+1) - flux_observed(iwl)
+ diff_mean = diff_mean + difference(iwl)
+enddo
+diff_mean = diff_mean/dfloat(number_wavelength_observed-1)
+do iwl = 1, number_wavelength_observed-1
+ variance = variance + (difference(iwl) - diff_mean)**2.d0
+enddo
+variance = variance/dfloat(number_wavelength_observed-1)
+sigma = dsqrt(variance*0.5d0); sigma = sigma*sigma
+deallocate(difference)

@@ -1,4 +1,5 @@
-subroutine PhasePlot(m,skewness_phase) ! Subroutine to compute and save phase diagram for the dominant frequency. It also computes skewness of the phase-binned curve
+subroutine PhasePlot(m,skewness_phase_mean,skewness_phase_median) ! Subroutine to compute and save phase diagram for the dominant frequency. It also computes skewness of the phase-binned curve
+!subroutine PhasePlot(m,skewness_phase_mean,skewness_phase_median,theta) ! Subroutine to compute and save phase diagram for the dominant frequency. It also computes skewness of the phase-binned curve
 
 use light_curve
 use lomb_scargle
@@ -10,6 +11,8 @@ integer MinimumLocation(1)
 character(500) string
 
 open(60,file=trim(adjustl(PhasePlotFiles(m))),status='unknown')
+!call PhaseBinning(FrequenciesExtracted(1),BinCentersPerFrequency,FluxBinnedPerFrequency,BinMinimumFluxValuePrimary,1,theta) ! Phase bin the data according to the dominant frequency
+!theta = theta/Variance(1)
 call PhaseBinning(FrequenciesExtracted(1),BinCentersPerFrequency,FluxBinnedPerFrequency,BinMinimumFluxValuePrimary,1) ! Phase bin the data according to the dominant frequency
 close(60) ! Close the file that contains phase-folded light curve
 
@@ -20,6 +23,6 @@ do i = 1, NumberBins ! Loop over the number of phase bins
 enddo
 close(60)
 
-!call Compute_skewness(FluxBinnedPerFrequency,NumberBins,Skewness_phase) ! Compute skewness from the phase binned light curve
+call Compute_skewness(FluxBinnedPerFrequency,NumberBins,Skewness_phase_mean,Skewness_phase_median) ! Compute skewness from the phase binned light curve
 
 end
