@@ -2,14 +2,14 @@ subroutine ComputeReachabilityDistanceAddSeed(iobj)
 
 use foptics_module
 implicit real(8) (a-h,o-z) 
-     
+
 do k = 1, NumberPerturbations ! loop over the number of attribute perturbations
  iseed = NumberObjectsSeedList
 
  do i = 1, NumberObjectsEpsilon ! loop over the number of objects in the epsilon neighborhood
   if(ObjectFlag(ObjectIndexInEpsilon(i)) /= 0) cycle ! Skip the object if it was processed before
   ReachabilityDistanceTemp = max(CoreReachabilityDistance(iobj,k),EpsilonDistances(i,k)) ! Compute reachability distance 
-
+  
   if(ReachabilityDistance(ObjectIndexInEpsilon(i),k) == DistanceUndefined) then ! if current reachability distance is undefined, update it and add object to seed list        
    iseed = iseed + 1 ! Get a position in the seed list
    ReachabilityDistance(ObjectIndexInEpsilon(i),k) = ReachabilityDistanceTemp ! Assing a point its reachability distance in the original list if it has been previously undefined

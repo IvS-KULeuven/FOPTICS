@@ -9,6 +9,7 @@
 *.so
 *.mode
 *.mod
+*.tmp
 
 # Temporary and results folders
 

@@ -1,0 +1,16 @@
+FF = gfortran
+FLAG = -c -ffree-line-length-512
+BDIR = .
+
+all: $(BDIR)/AttributeSelection Makefile_AttributeSelection
+
+$(BDIR)/AttributeSelection: AttributeSelection.o Makefile_AttributeSelection
+	$(FF)  -o $(BDIR)/AttributeSelection *.o
+
+AttributeSelection.o: AttributeSelection.f90 
+	$(FF)  $(FLAG) AttributeSelection.f90
+
+clean:
+	@rm -f *.o
+	@rm -f *.mod
+	@rm -f AttributeSelection	    

@@ -1,0 +1,82 @@
+FF = mpif90
+FLAG = -c -ffree-line-length-512 -fmax-stack-var-size=32768
+BDIR = .
+
+all: $(BDIR)/LCAnalysis_p Makefile_LCAnalysis_parallel_GNU
+
+$(BDIR)/LCAnalysis_p: modules_LCA.o Light_Curve_Analysis_parallel.o LCA_main.o input.o Read_LightCurve.o LightCurve_statistic.o Subtract_RefValue.o Subtract_Polynomial.o poly.o linfit.o ludcmp.o lubksb.o Periodogram_Setup.o LombScargle_Periodogram.o scar1.o scar2.o FittingFunction.o ftest.o PhasePlot.o Compute_skewness.o Sort1.o Sort2.o PhaseBinning.o Makefile_LCAnalysis_parallel_GNU
+	$(FF)  -o $(BDIR)/LCAnalysis_p *.o
+
+modules_LCA.o: modules_LCA.f90 
+	$(FF)  $(FLAG) modules_LCA.f90
+
+Light_Curve_Analysis_parallel.o: Light_Curve_Analysis_parallel.f90
+	$(FF)  $(FLAG) Light_Curve_Analysis_parallel.f90
+
+LCA_main.o: LCA_main.f90 
+	$(FF)  $(FLAG) LCA_main.f90
+	
+input.o: input.f90 
+	$(FF)  $(FLAG) input.f90
+	
+Read_LightCurve.o: Read_LightCurve.f90 
+	$(FF)  $(FLAG) Read_LightCurve.f90
+	
+LightCurve_statistic.o: LightCurve_statistic.f90 
+	$(FF)  $(FLAG) LightCurve_statistic.f90
+	
+Subtract_RefValue.o: Subtract_RefValue.f90 
+	$(FF)  $(FLAG) Subtract_RefValue.f90
+	
+Subtract_Polynomial.o: Subtract_Polynomial.f90 
+	$(FF)  $(FLAG) Subtract_Polynomial.f90
+	
+poly.o: poly.f90 
+	$(FF)  $(FLAG) poly.f90
+
+linfit.o: linfit.f90 
+	$(FF)  $(FLAG) linfit.f90
+
+ludcmp.o: ludcmp.f90 
+	$(FF)  $(FLAG) ludcmp.f90
+
+lubksb.o: lubksb.f90 
+	$(FF)  $(FLAG) lubksb.f90
+
+Periodogram_Setup.o: Periodogram_Setup.f90 
+	$(FF)  $(FLAG) Periodogram_Setup.f90
+
+LombScargle_Periodogram.o: LombScargle_Periodogram.f90 
+	$(FF)  $(FLAG) LombScargle_Periodogram.f90
+
+scar1.o: scar1.f90 
+	$(FF)  $(FLAG) scar1.f90
+
+scar2.o: scar2.f90 
+	$(FF)  $(FLAG) scar2.f90
+
+FittingFunction.o: FittingFunction.f90 
+	$(FF)  $(FLAG) FittingFunction.f90
+	
+ftest.o: ftest.f90 
+	$(FF)  $(FLAG) ftest.f90	
+	
+PhasePlot.o: PhasePlot.f90 
+	$(FF)  $(FLAG) PhasePlot.f90
+
+Compute_skewness.o: Compute_skewness.f90 
+	$(FF)  $(FLAG) Compute_skewness.f90
+
+Sort1.o: Sort1.f 
+	$(FF)  $(FLAG) Sort1.f
+
+Sort2.o: Sort2.f 
+	$(FF)  $(FLAG) Sort2.f
+
+PhaseBinning.o: PhaseBinning.f90
+	$(FF)  $(FLAG) PhaseBinning.f90
+	
+clean:
+	@rm -f *.o
+	@rm -f *.mod
+	@rm -f LCAnalysis_p

@@ -60,7 +60,8 @@ arg = ' '; write(arg,"('mkdir -p ',a)") trim(adjustl(LightDir))
 ios = system(trim(adjustl(arg))) ! Create directory that will contain amplitude spectra
 
 k = 0; k = index(DataDir,'/',back=.true.)
-arg = ' '; write(arg,"('find ',a,' -maxdepth 1 -type f > lightCurveFilenames')") trim(adjustl(DataDir(1:k-1))) ! Get light curve file names
+!arg = ' '; write(arg,"('find ',a,'*.',a,' -maxdepth 1 -type f > lightCurveFilenames')") trim(adjustl(DataDir(1:k))), trim(adjustl(FileExt)) ! Get light curve file names
+arg = ' '; write(arg,"('find ',a,' -maxdepth 1 -type f > lightCurveFilenames')") trim(adjustl(DataDir(1:k))) ! Get light curve file names
 ios = system(trim(adjustl(arg))) ! Execute prompt command
 
 open(10,file='lightCurveFilenames',status='old',iostat=ios) ! Open file

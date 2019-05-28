@@ -19,6 +19,7 @@ MinimumMeanReachabilityDistance = DistanceUndefined; MeanReachabilityDistance = 
 NumberObjectsSeedList = 0; NumberObjectsProcessed = 0 ! Variables
 
 iii = 0
+write(*,"('Processing Order  Original position  Dr to the nearest core point  Core distance')")
 do i = 1, NumberObjects ! Loop over the number of objects
  if(ObjectFlag(i) == 0) then ! Process objects that are not yet processed (ObjectFlag = 0)
   call ComputeEpsilonCoreDistance(i) ! Determine Epsilon neighborhood and compute epsilon neighborhood and core distances
@@ -47,10 +48,9 @@ do i = 1, NumberObjects ! Loop over the number of objects
    
    ObjectFlag(IndexPosition) = 1 ! Object is now processed           
    NumberObjectsProcessed = NumberObjectsProcessed + 1 ! Increase counter for number of processed objects             
-!   write(*,*) NumberObjectsProcessed, NumberObjectsEpsilon, NumberObjectsSeedList
    ObjectOrderIndex(NumberObjectsProcessed) = IndexPosition ! update index array to keep track of the correct ordering of the objects (this array keeps order in which objects are being processed)
 
-! Remove treated object from seed list (update seedlist, list with reachability distances and list with seedlist positions). Removing objects from list is done using 
+! Remove treated object from the seed list (update seedlist, list with reachability distances and list with seedlist positions). Removing objects from list is done using 
 ! switching (except if it is the last one). The object switches place with the last one and can then easily be removed by reducing NSEED with one (without requiring 
 ! copying of large parts of arrays, too time consuming).             
    
@@ -79,7 +79,7 @@ do i = 1, NumberObjects ! Loop over the number of objects
 ! with respect to epsilon (eps) and MinPts (NP). This routine computes or updates the reachability distances               
 
    call ComputeReachabilityDistanceAddSeed(IndexPosition)
-    
+
   enddo
 
  endif
