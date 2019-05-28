@@ -8,9 +8,9 @@ character(500) arg ! Some declarations relevant to this subroutine only
 
 if(trim(adjustl(LightCurveUnits)) == 'flux' .or. trim(adjustl(LightCurveUnits)) == 'FLUX' .or. trim(adjustl(LightCurveUnits)) == 'Flux') then
  check_flux_flag = 1
- write(*,"('    Input light curve is in flux')")
+ write(500,"('    Input light curve is in flux')")
 else
- write(*,"('    No conversion is done as the input light curve is in magnitudes')")
+ write(500,"('    No conversion is done as the input light curve is in magnitudes')")
  check_flux_flag = 0
 endif
 
@@ -25,7 +25,6 @@ do
  read(arg,*,iostat=ios) t, f ! Read time and flux from a string
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! This is needed when light curves are in relative flux with the mean value of zero. This allows to avoid negative flux values. !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! if(check_flux_flag == 1) f = f + 1.d8
  if(check_flux_flag == 1) f = f*1.d-6 + 1.d0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -46,7 +45,6 @@ do
  read(arg,*,iostat=ios) t, f ! Read time and flux from a string
 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!! This is needed when light curves are in relative flux with the mean value of zero. This allows to avoid negative flux values. !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-! if(check_flux_flag == 1) f = f + 1.d8
  if(check_flux_flag == 1) f = f*1.d-6 + 1.d0
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
@@ -59,6 +57,6 @@ do
 ! endif
 enddo
 
-call sort2(ntimes,times,flux)
+call sort2(ntimes,times,flux) ! Sort time and flux arrays by time
 
 end
