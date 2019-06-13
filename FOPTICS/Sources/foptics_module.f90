@@ -2,7 +2,7 @@ module foptics_module
 
 !!!!!!!!!!!!!!!! Input/Output !!!!!!!!!!!!!!!!!!!
 
-character(200) InputDirectory, OutputFile
+character(200) InputList, OutputFile
 integer NumberPerturbations
 
 !!!!!!!!!!!!!!! Objects & attributes !!!!!!!!!!!!

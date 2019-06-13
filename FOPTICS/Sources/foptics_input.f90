@@ -7,7 +7,7 @@ implicit real(8) (a-h,o-z)
 character(500) filename, arg
 character(200), allocatable :: InputFilesArray(:)
 
-call getarg(1,InputDirectory) ! Get input directory from the command line
+call getarg(1,InputList) ! Get input directory from the command line
 call getarg(2,OutputFile) ! Get Output file name from the command line
 call getarg(3,arg) ! Get the number of attributes from the command line
 read(arg,*) NumberAttributes ! Read off the actual number from the string variable
@@ -18,11 +18,9 @@ read(arg,*) MinimumNumberPointsEpsilon
 
 !!!!!!!!!!!!!!! Get perturbed data sets !!!!!!!!!!!!!!!!!!!!!!!
 
-call system('ls '//InputDirectory//' > files.txt') ! Create a list of file names associated with the perturbed data sets
-    
-open(1,file='files.txt',status='old',iostat=ios) ! Open the list and return an error message in case it could not be opened
+open(1,file=trim(adjustl(InputList)),status='old',iostat=ios) ! Open the list and return an error message in case it could not be opened
 if(ios /= 0) then
- write(*,"('List of file names associated with the perturbed data sets ',a,' could not be opened')") 'files.txt'
+ write(*,"('List of file names associated with the perturbed data sets ',a,' could not be opened')") trim(adjustl(InputList))
  stop
 endif
 
@@ -37,12 +35,12 @@ rewind(1); allocate(InputFilesArray(NumberPerturbations)) ! Go back to the first
 do i = 1, NumberPerturbations
  read(1,"(a)") InputFilesArray(i) ! Get the file names and store them in the array
 enddo
-close(1,status="delete") ! Close the list and delete it
+close(1) ! Close the list
 
 !!!!!!!!!!!!!!! Get perturbed attributes !!!!!!!!!!!!!!!!!!!!!!!!
 
 do iper = 1, NumberPerturbations ! Loop over the number of attribute files
- filename = ' '; filename = trim(adjustl(InputDirectory))//trim(adjustl(InputFilesArray(iper))) ! Get the file name
+ filename = ' '; filename = trim(adjustl(InputFilesArray(iper))) ! Get the file name
 
  open(1,file=trim(adjustl(filename)),status='old',iostat=ios) ! Open an attribute file and check whether it exists
  if(ios /= 0) then

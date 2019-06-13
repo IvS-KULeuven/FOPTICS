@@ -12,7 +12,7 @@
 
 where
 
-- arg1: the input directory (e.g., InputDirectory/). This directory contains files with object IDs and attributes
+- arg1: file that holds the list of files with attributes (e.g., foptics_list)
 - arg2: the output file where the final (column 1) and original (column 2) object order, object ID (column 3), reachability distance (column 4), and normalised reachability distance (column 5) are stored (e.g., OutputFile.txt). Reachability diagram is simply a plot of the final object order (column 1) versus normalised reachability distance (column 5). 
 - arg3: the number of attributes to be used (e.g., 2)
 - arg4: the value of undefined distance (any large number, e.g., 1)
