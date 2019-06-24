@@ -3,7 +3,7 @@ This function plots the confusion matrix.
 
 
 ### How to run
-Call plot_confusion_matrix(cm, classes, precision, normalize=True, title='Confusion matrix', cmap=plt.cm.Blues), where
+Function: plot_confusion_matrix(cm, classes, precision, normalize=True, title='Confusion matrix', cmap=plt.cm.Blues), where
 
 * *cm* is an n x n numpy array representing the confusion matrix with on the y-axis the true labels and x-axis predicted labels;
 * *classes* is a list of length n with the class labels in the same order as cm;
