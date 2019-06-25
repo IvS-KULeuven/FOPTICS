@@ -95,7 +95,7 @@ def gradient_extraction(clusterordering, minpts, t, w):
 
 
 def large_cluster_filtering(clusters, input_size, cluster_ratio):
-# Source: D. Vida. Cyoptics clustering. https://github.com/dvida/cyoptics-clustering, 2018
+# Source: D. Vida. Cyoptics clustering. https://github.com/dvida/cyoptics-clustering, 2018 (MIT License)
 
     filtered_clusters = []
 
@@ -107,7 +107,7 @@ def large_cluster_filtering(clusters, input_size, cluster_ratio):
 
 
 def merge_clusters(clusters, similarity_ratio):
-# Source: D. Vida. Cyoptics clustering. https://github.com/dvida/cyoptics-clustering, 2018
+# Source: D. Vida. Cyoptics clustering. https://github.com/dvida/cyoptics-clustering, 2018 (MIT License)
 
     clusters = sorted(clusters, key=len, reverse=True)
 
