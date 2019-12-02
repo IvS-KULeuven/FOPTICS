@@ -15,6 +15,7 @@
 
 WORKDIR/
 PlotScripts/
+Supplementary_routines/
 
 # Logs and databases
 

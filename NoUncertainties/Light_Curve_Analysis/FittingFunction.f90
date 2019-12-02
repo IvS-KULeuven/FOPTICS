@@ -57,9 +57,9 @@ if(ifreq == 1) then ! We do this for the dominant extracted frequency only
  MedianLowValue = (MedianLowArray(NumberPointsMedian/2) + MedianLowArray(NumberPointsMedian/2+1))*0.5d0 ! Median of the NumberPointsMedian low flux values
 
 ! write(*,*) DecisiveDifference - 0.0025d0, DecisiveDifference - (MedianHighValue - MedianLowValue)*0.03d0
- if((DecisiveDifference > 0.0025d0) .and. (DecisiveDifference > (MedianHighValue - MedianLowValue)*0.03d0)) then ! Change the frequency to half the value when the two criteria in question are satisfied
-  FrequenciesExtracted(ifreq) = FrequenciesExtracted(ifreq)*0.5d0
- endif
+! if((DecisiveDifference > 0.0025d0) .and. (DecisiveDifference > (MedianHighValue - MedianLowValue)*0.03d0)) then ! Change the frequency to half the value when the two criteria in question are satisfied
+!  FrequenciesExtracted(ifreq) = FrequenciesExtracted(ifreq)*0.5d0
+! endif
 
 endif
 
