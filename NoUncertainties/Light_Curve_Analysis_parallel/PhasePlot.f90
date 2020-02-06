@@ -13,7 +13,7 @@ character(500) string
 open(60,file=trim(adjustl(PhasePlotFiles(il))),status='unknown')
 !call PhaseBinning(FrequenciesExtracted(1),BinCentersPerFrequency,FluxBinnedPerFrequency,BinMinimumFluxValuePrimary,1,theta) ! Phase bin the data according to the dominant frequency
 !theta = theta/Variance(1)
-call PhaseBinning(FrequenciesExtracted(1),BinCentersPerFrequency,FluxBinnedPerFrequency,BinMinimumFluxValuePrimary,0) ! Phase bin the data according to the dominant frequency
+call PhaseBinning(FrequenciesExtracted(1),BinCentersPerFrequency,FluxBinnedPerFrequency,BinMinimumFluxValuePrimary,1) ! Phase bin the data according to the dominant frequency
 close(60) ! Close the file that contains phase-folded light curve
 
 i = 0; i = index(PhasePlotFiles(il),'.',back=.true.); write(string,"(a,'_binned',a)") trim(adjustl(PhasePlotFiles(il)(1:i-1))), trim(adjustl(PhasePlotFiles(il)(i:)))
