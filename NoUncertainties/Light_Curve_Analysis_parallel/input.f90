@@ -74,8 +74,7 @@ ios = system(trim(adjustl(arg))) ! Create directory that will contain amplitude 
 
 if(proc == 0) then ! We involve main process only
  k = 0; k = index(DataDir,'/',back=.true.)
- arg = ' '; write(arg,"('find ',a,'*.',a,' -maxdepth 1 -type f > ',a,'lightCurveFilenames')") trim(adjustl(DataDir(1:k))), &
- 		          trim(adjustl(FileExt)), trim(adjustl(OutDir)) ! Get light curve file names
+ arg = ' '; write(arg,"('find ',a,' -maxdepth 1 -type f > ',a,'lightCurveFilenames')") trim(adjustl(DataDir(1:k-1))), trim(adjustl(OutDir)) ! Get light curve file names
  ios = system(trim(adjustl(arg))) ! Execute prompt command
 
  arg = ' '; write(arg,"(a,'lightCurveFilenames')") trim(adjustl(OutDir))
