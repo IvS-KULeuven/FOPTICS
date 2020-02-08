@@ -82,7 +82,8 @@ enddo
 ! Fit the function to the data
 
 call linfit(ntimes,TwiceNumberHarmonics,flux,weights,FUNC,a1,b1) 
-call ludcmp(a1,TwiceNumberHarmonics,TwiceNumberHarmonics,indx1)
+call ludcmp(a1,TwiceNumberHarmonics,TwiceNumberHarmonics,indx1,ierr)
+if(ierr /= 0) return
 call lubksb(a1,TwiceNumberHarmonics,TwiceNumberHarmonics,indx1,b1)
 
 FittingCoefficientsPerFrequency(ifreq,1:TwiceNumberHarmonics) = b1(1:TwiceNumberHarmonics)

@@ -8,6 +8,7 @@ implicit real(8) (a-h,o-z)
 integer temp(1), proc
 character(500) arg, arg1
 
+ierr = 0
 open(60,file=trim(adjustl(LightCurveFiles(il))),status='old',iostat=ios) ! Open a light curve file and check whether it exists
 if(ios /= 0) then
  write(*,"('Proc',i4.4,': Light curve ',a,' was not found')") proc, trim(adjustl(LightCurveFiles(il)))
@@ -92,6 +93,9 @@ do ifr = 1, NumberFrequenciesExtract ! Loop over the number of frequencies to be
  enddo
 
  call FittingFunction(ifr) ! Fit the frequency in question + N harmonics to the data and subtract the fitted function from the observations (the flux array is modified as the contribution from the first detected frequency and its harmonics is removed)
+ if(ierr /= 0) then
+  write(*,"('Singular matrix in ludcmp ',a,' frequency number:',i1)") trim(adjustl(LightCurveFiles(il))), ifr
+ endif
  
 enddo
  

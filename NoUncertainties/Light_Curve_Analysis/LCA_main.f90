@@ -12,6 +12,7 @@ call input ! Subroutine that organises a flow of input information
 !write(100,"('light curve   time mean   time median   phase mean   phase median')")
 
 do m = 1, number_LightCurves ! Loop over the number of light curves
+ ierr = 0
  open(60,file=trim(adjustl(LightCurveFiles(m))),status='old',iostat=ios) ! Open a light curve file and check whether it exists
  if(ios /= 0) then
   write(*,"('Light curve ',a,' was not found')") trim(adjustl(LightCurveFiles(m)))
@@ -96,6 +97,9 @@ do m = 1, number_LightCurves ! Loop over the number of light curves
   enddo
 
   call FittingFunction(ifr) ! Fit the frequency in question + N harmonics to the data and subtract the fitted function from the observations (the flux array is modified as the contribution from the first detected frequency and its harmonics is removed)
+  if(ierr /= 0) then
+   write(*,"('Singular matrix in ludcmp ',a,' frequency number:',i1)") trim(adjustl(LightCurveFiles(il))), ifr
+  endif
  
  enddo
  
