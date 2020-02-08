@@ -10,6 +10,7 @@ module light_curve ! Module containing relevant information about light curves
 
 integer ndeg ! Polynomial degree for light curve detrending (probably, does not need to be 2, can be anything)
 integer NFswitch ! Switch for the Nyquist frequency calculation (0 - Kepler long-cadence, 1 - computed from mean of the inverse time steps)
+integer ierr
 
 character(100) LightCurveUnits
 real(8), allocatable :: times(:), flux(:), weights(:), Variance(:), flux_detrended(:), BinCenters(:)
