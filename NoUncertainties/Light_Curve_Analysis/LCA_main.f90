@@ -98,7 +98,7 @@ do m = 1, number_LightCurves ! Loop over the number of light curves
 
   call FittingFunction(ifr) ! Fit the frequency in question + N harmonics to the data and subtract the fitted function from the observations (the flux array is modified as the contribution from the first detected frequency and its harmonics is removed)
   if(ierr /= 0) then
-   write(*,"('Singular matrix in ludcmp ',a,' frequency number:',i1)") trim(adjustl(LightCurveFiles(il))), ifr
+   write(*,"('Singular matrix in ludcmp ',a,' frequency number:',i1)") trim(adjustl(LightCurveFiles(m))), ifr
   endif
  
  enddo
