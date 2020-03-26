@@ -15,7 +15,6 @@ do i = 1, n
  enddo
   
  if(aamax == 0.d0) then
-  write(*,"('singular matrix in ludcmp')")
   ierr = 1
   return
  endif

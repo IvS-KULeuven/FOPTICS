@@ -54,7 +54,7 @@ endif
 
 call mpi_barrier(mpi_comm_world,ios)
 close(10) ! Close output file
-deallocate(LightCurveFiles,PhasePlotFiles,AmplitudeSpectraFiles,BlackListFrequencies,BinCenters)
+deallocate(LightCurveFiles,PhasePlotFiles,AmplitudeSpectraFiles,BlackListFrequencies,BinCenters,OutputPlots)
 
 if(proc == 0) then
  do i = 1, nproc ! Merging individual light curve files

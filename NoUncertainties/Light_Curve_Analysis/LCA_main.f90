@@ -6,7 +6,8 @@ use lomb_scargle
 implicit real(8) (a-h,o-z)
 
 integer temp(1)
-character(500) arg, arg1
+character(500) LightCurveOriginal, LightCurveDetrended
+logical ifreq_check
 
 call input ! Subroutine that organises a flow of input information
 !write(100,"('light curve   time mean   time median   phase mean   phase median')")
@@ -35,9 +36,9 @@ do m = 1, number_LightCurves ! Loop over the number of light curves
  call Subtract_RefValue(ntimes,flux,FluxRawMean) ! Subtract mean magnitude from the raw flux array (flux array is changed here)
  
  kk = 0; kk = index(LightCurveFiles(m),'/',back=.true.); kk1 = 0; kk1 = index(LightCurveFiles(m),'.',back=.true.)
- write(arg,"(a,'lc-',a)") trim(adjustl(LightDir)), trim(adjustl(LightCurveFiles(m)(kk+1:))) ! File names (including full path) for light curves
- write(arg1,"(a,'lc-',a,'_detrended',a)") trim(adjustl(LightDir)), trim(adjustl(LightCurveFiles(m)(kk+1:kk1-1))), trim(adjustl(LightCurveFiles(m)(kk1:))) ! File names (including full path) for light curves
- open(60,file=trim(adjustl(arg))) ! Original light curve
+ write(LightCurveOriginal,"(a,'lc-',a)") trim(adjustl(LightDir)), trim(adjustl(LightCurveFiles(m)(kk+1:))) ! File names (including full path) for light curves
+ write(LightCurveDetrended,"(a,'lc-',a,'_detrended',a)") trim(adjustl(LightDir)), trim(adjustl(LightCurveFiles(m)(kk+1:kk1-1))), trim(adjustl(LightCurveFiles(m)(kk1:))) ! File names (including full path) for light curves
+ open(60,file=trim(adjustl(LightCurveOriginal))) ! Original light curve
  do ii = 1, ntimes
   write(60,*) times(ii), flux(ii)
  enddo
@@ -45,38 +46,79 @@ do m = 1, number_LightCurves ! Loop over the number of light curves
  
  weights = 1.d0 ! setting weights to unity
  if(ndeg /= 0) call Subtract_Polynomial ! Detrend the data by fitting and subtracting a polynomial (the flux array will be changed)
+ if(ierr /= 0) then
+  write(*,"('Subtract_Polynomial: singular matrix in ludcmp; light curve file = ',a)") trim(adjustl(LightCurveFiles(m)))
+  stop
+ endif
  flux_detrended = flux ! Store detrended flux in a separate array (will be used for a phase plot at the end)
- 
- NumberZeroCrossings = 0 ! Number of zero crossings counter initiation
- open(60,file=trim(adjustl(arg1))) ! Detrended light curve
- do ii = 1, ntimes
-  write(60,*) times(ii), flux(ii)
-  if(ii /= 1) then ! compute number of zero crossings
-   if((flux(ii) < 0.d0 .and. flux(ii-1) > 0.d0) .or. (flux(ii) > 0.d0 .and. flux(ii-1) < 0.d0)) NumberZeroCrossings = NumberZeroCrossings + 1
-  endif
- enddo
- close(60)
-
- call Compute_skewness(flux,ntimes,Skewness_time_mean,Skewness_time_median) ! Compute skewness
- 
+  
  NumberFrequencies = dint((NyquistFrequency - FrequencyResolution)/FrequencyStep) + 1 ! Total number of frequencies
  allocate(Variance(NumberFrequenciesExtract+1),FrequenciesExtracted(NumberFrequenciesExtract),FittingCoefficientsPerFrequency(NumberFrequenciesExtract,TwiceNumberHarmonics)) ! Allocate variance array
  allocate(FrequencyProbability(NumberFrequenciesExtract+1))
  allocate(SS(NumberFrequencies),SC(NumberFrequencies),SS2(NumberFrequencies),SC2(NumberFrequencies),F1(NumberFrequencies),PS(NumberFrequencies),S0N(ntimes),C0N(ntimes), &
           DEN(NumberFrequencies),SDFN(ntimes),CDFN(ntimes))
  
+ icheckDetrendedLCStat = 0 
  do ifr = 1, NumberFrequenciesExtract ! Loop over the number of frequencies to be extracted
   
-  call LightCurve_statistic(ntimes,flux,FluxDetrendedMean,VarianceDetrended) ! Do some detrended light curve statistics (mean and variance) 
+  do ! Infinite loop to skip frequencies from a black list or those that are < 1.5*frequency resolution: 1) the highest amplitude peak is detected and is prewhitened when the frequency in question matches one of the above conditions; 2) the cycle repeats until a frequency is found that does not match any of the above conditions
+   call LightCurve_statistic(ntimes,flux,FluxDetrendedMean,VarianceDetrended) ! Do some detrended light curve statistics (mean and variance) 
 
-  call Subtract_RefValue(ntimes,flux,FluxDetrendedMean) ! Subtract mean magnitude from (detrended) flux array (flux array is changed here)     
+   call Subtract_RefValue(ntimes,flux,FluxDetrendedMean) ! Subtract mean magnitude from (detrended) flux array (flux array is changed here)     
 
-  Variance(ifr) = VarianceDetrended  ! Keep variance of the light curve before the frequency in question is prewhitened 
+   if(icheckDetrendedLCStat == 0) then ! Skewness, number of zero crossings and ratio between positive and negative flux values. We will also save detrended light curve here
+    icheckDetrendedLCStat = 1
+    call Compute_skewness(flux,ntimes,Skewness_time_mean,Skewness_time_median) ! Compute skewness
+    NumberZeroCrossings = 0 ! Number of zero crossings counter initiation
+    FluxNegative = 0.d0; FluxPositive = 0.d0; NumberFluxNegative = 0; NumberFluxPositive = 0
+    open(60,file=trim(adjustl(LightCurveDetrended))) ! Detrended light curve
+    do ii = 1, ntimes
+     write(60,*) times(ii), flux(ii)
+     if(ii /= 1) then ! compute number of zero crossings
+      if((flux(ii) < 0.d0 .and. flux(ii-1) > 0.d0) .or. (flux(ii) > 0.d0 .and. flux(ii-1) < 0.d0)) NumberZeroCrossings = NumberZeroCrossings + 1
+     endif
+     if(flux(ii) < 0.d0) then
+      FluxNegative = FluxNegative + (flux(ii) - FluxDetrendedMean)**2.d0; NumberFluxNegative = NumberFluxNegative + 1
+     elseif(flux(ii) > 0.d0) then
+      FluxPositive = FluxPositive + (flux(ii) - FluxDetrendedMean)**2.d0; NumberFluxPositive = NumberFluxPositive + 1
+     endif
+    enddo
+    close(60); FluxNegative = FluxNegative/NumberFluxNegative; FluxPositive = FluxPositive/NumberFluxPositive
+    FluxRatio = FluxNegative/FluxPositive; FluxRatio = dsqrt(FluxRatio)
+   endif
+
+   Variance(ifr) = VarianceDetrended  ! Keep variance of the light curve before the frequency in question is prewhitened 
   
-  call LombScargle_Periodogram(ifr) ! Compute Lomb-Scargle periodogram (uses global variables and arrays - times, flux, ntimes, etc. - without changing them; the routine related arrays are changed each time the subroutine is called and the changed variables/arrays are used as starting values in the next iteration)
+   call LombScargle_Periodogram(ifr) ! Compute Lomb-Scargle periodogram (uses global variables and arrays - times, flux, ntimes, etc. - without changing them; the routine related arrays are changed each time the subroutine is called and the changed variables/arrays are used as starting values in the next iteration)
 
-  PS(1:NumberFrequencies) = dsqrt(PS(1:NumberFrequencies))*dsqrt(4.d0/real(ntimes,8))   ! Normalize the periodogram
-        
+   PS(1:NumberFrequencies) = dsqrt(PS(1:NumberFrequencies))*dsqrt(4.d0/real(ntimes,8))   ! Normalize the periodogram
+           
+   ios = 0; PeakValue = maxval(PS); temp = maxloc(PS); FrequenciesExtracted(ifr) = F1(temp(1)) ! Get the highest peak in the periodogram
+   if(FrequenciesExtracted(ifr) < 1.5d0*FrequencyResolution) then ! Skip frequencies that are lower than 1.5*frequency resolution
+    ifreq_check = .false.
+    call FittingFunction(ifr,ifreq_check) ! Fit the frequency in question + N harmonics to the data and subtract the fitted function from the observations (the flux array is modified as the contribution from the first detected frequency and its harmonics is removed)
+    if(ierr /= 0) then
+     write(*,"('FittingFunction: singular matrix in ludcmp; light curve file = ',a,'; frequency number: ',i1)") trim(adjustl(LightCurveFiles(m))), ifr
+     stop
+    endif
+    cycle
+   endif
+   
+   do ibf = 1, NumberBlackListFrequencies ! Check whether the highest detected peak is black listed (e.g., instrumental frequency)
+    if(dabs(FrequenciesExtracted(ifr) - BlackListFrequencies(ibf)) <= FrequencyResolution) then ! The highest amplitude frequency is the one from a black list" (within the frequency resolution)
+     ifreq_check = .false.
+     call FittingFunction(ifr,ifreq_check) ! Fit the frequency in question + N harmonics to the data and subtract the fitted function from the observations (the flux array is modified as the contribution from the first detected frequency and its harmonics is removed)
+     if(ierr /= 0) then
+      write(*,"('FittingFunction: singular matrix in ludcmp; light curve file = ',a,'; frequency number: ',i1)") trim(adjustl(LightCurveFiles(m))), ifr
+      stop
+     endif
+     ios = 1 ! ios = 1 indicates that the frequency in question coincides with the one from a black list 
+    endif
+    if(ios /= 0) exit ! Exit the loop over the number of black listed frequency when the match has been found
+   enddo
+   if(ios == 0) exit ! Exit the infinite loop when no match to any of the black listed frequencies has been found
+  enddo
+
   if(ifr == 1) then ! Write the first amplitude spectrum to a file
    open(70,file=trim(adjustl(AmplitudeSpectraFiles(m))),status='unknown')
    do i = 1, NumberFrequencies
@@ -84,21 +126,12 @@ do m = 1, number_LightCurves ! Loop over the number of light curves
    enddo
    close(70)
   endif
-   
-  do ! Infinite loop to skip frequencies from a black list: 1) the highest amplitude peak is detected and its amplitude is set artificially to zero when the frequency in question matches the one from the black list; 2) the cycle repeats until a frequency is found that does not match any of those from the black list (ios = 0 condition)
-   ios = 0; PeakValue = maxval(PS); temp = maxloc(PS); FrequenciesExtracted(ifr) = F1(temp(1)) ! Get the highest peak in the periodogram
-   do ibf = 1, NumberBlackListFrequencies ! Check whether the highest detected peak is black listed (e.g., instrumental frequency)
-    if(dabs(FrequenciesExtracted(ifr) - BlackListFrequencies(ibf)) <= FrequencyResolution) then ! The highest amplitude frequency is the one from a black list" (within the frequency resolution)
-     PS(temp(1)) = 0.d0; ios = 1 ! Set the amplitude of the black listed frequency artificially to zero (ios = 1 indicates that the frequency in question coincides with the one from a black list) 
-    endif
-    if(ios /= 0) exit ! Exit the loop over the number of black listed frequency when the match has been found
-   enddo
-   if(ios == 0) exit ! Exit the infinite loop when no match to any of the black listed frequencies has been found
-  enddo
 
-  call FittingFunction(ifr) ! Fit the frequency in question + N harmonics to the data and subtract the fitted function from the observations (the flux array is modified as the contribution from the first detected frequency and its harmonics is removed)
+  ifreq_check = .true.
+  call FittingFunction(ifr,ifreq_check) ! Fit the frequency in question + N harmonics to the data and subtract the fitted function from the observations (the flux array is modified as the contribution from the first detected frequency and its harmonics is removed)
   if(ierr /= 0) then
-   write(*,"('Singular matrix in ludcmp ',a,' frequency number:',i1)") trim(adjustl(LightCurveFiles(m))), ifr
+   write(*,"('FittingFunction: singular matrix in ludcmp; light curve file = ',a,'; frequency number: ',i1)") trim(adjustl(LightCurveFiles(m))), ifr
+   stop
   endif
  
  enddo
@@ -120,9 +153,8 @@ call PhasePlot(m,skewness_phase_mean,skewness_phase_median) ! Make a phase plot 
  write(10,fmt="(a,'   0.00000000     0.00000000  ',1000(f16.8,1x))") trim(adjustl(LightCurveFiles(m))), (FrequenciesExtracted(i), i = 1, NumberFrequenciesExtract), & ! Output
           FittingCoefficientsPerFrequency(1,1), (FittingCoefficientsPerFrequency(i,2:NumberHarmonics+1), i = 1, NumberFrequenciesExtract), &
           (FittingCoefficientsPerFrequency(i,NumberHarmonics+2:TwiceNumberHarmonics), i = 1, NumberFrequenciesExtract), (Variance(i), i = 1, NumberFrequenciesExtract+1), &
-!          Variance(2)/Variance(1), (1.d0 - Variance(NumberFrequenciesExtract+1)/Variance(1)), VarianceReduction, skewness_time, skewness_phase, (FrequencyProbability(i), i = 1, NumberFrequenciesExtract+1)
-          Variance(2)/Variance(1), (1.d0 - Variance(NumberFrequenciesExtract+1)/Variance(1)), skewness_time_mean, real(NumberZeroCrossings,8), (FrequencyProbability(i), i = 1, NumberFrequenciesExtract+1) 
-! write(100,"(a,1x,1000(f16.8,1x))") trim(adjustl(LightCurveFiles(m))), skewness_time_mean, skewness_time_median, skewness_phase_mean, skewness_phase_median
+          Variance(2)/Variance(1), (1.d0 - Variance(NumberFrequenciesExtract+1)/Variance(1)), skewness_time_mean, real(NumberZeroCrossings,8)/real(ntimes,8), &
+          FluxRatio, (FrequencyProbability(i), i = 1, NumberFrequenciesExtract+1)
  write(*,"('Light curve ',a,' has been processed')") trim(adjustl(LightCurveFiles(m))) ! Print some info
  deallocate(times,flux,flux_detrended,weights,Variance,FrequenciesExtracted,FittingCoefficientsPerFrequency,FrequencyProbability)
  deallocate(SS,SC,SS2,SC2,F1,PS,S0N,C0N,DEN,SDFN,CDFN)
