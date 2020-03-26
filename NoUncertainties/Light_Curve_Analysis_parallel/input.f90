@@ -90,24 +90,27 @@ if(proc == 0) then ! We involve main process only
   if(ios /= 0) exit
   number_LightCurves = number_LightCurves + 1 ! Get the number of light curves by going through the entries of the file until the last record is reached
  enddo
- rewind(10); allocate(LightCurveFiles(number_LightCurves),PhasePlotFiles(number_LightCurves),AmplitudeSpectraFiles(number_LightCurves)) ! Allocate arrays that will contain light curve, phase plot, and amplitude spectra file names
+ rewind(10); allocate(LightCurveFiles(number_LightCurves),PhasePlotFiles(number_LightCurves),AmplitudeSpectraFiles(number_LightCurves),OutputPlots(number_LightCurves)) ! Allocate arrays that will contain light curve, phase plot, and amplitude spectra file names
 
  do i = 1, number_LightCurves ! Loop over the number of entries in the file and get the light curve file names 
   read(10,'(a)') LightCurveFiles(i)
   k = 0; k = index(LightCurveFiles(i),'/',back=.true.)
+  k1 = 0; k1 = index(LightCurveFiles(i),'.',back=.true.)
   write(PhasePlotFiles(i),"(a,'ph-',a)") trim(adjustl(PhaseDir)), trim(adjustl(LightCurveFiles(i)(k+1:))) ! File names (including full path) for phase plots
   write(AmplitudeSpectraFiles(i),"(a,'as-',a)") trim(adjustl(AmplDir)), trim(adjustl(LightCurveFiles(i)(k+1:))) ! File names (including full path) for amplitude spectra
+  write(OutputPlots(i),"(a,a,'pdf')") trim(adjustl(PhaseDir)), trim(adjustl(LightCurveFiles(i)(k+1:k1))) ! File names (including full path) for phase plots  
  enddo 
  close(10,status='delete') ! Close the file and delete it
 endif
 call mpi_barrier(mpi_comm_world,ios) ! synchronising individual processes in time
 call mpi_bcast(number_LightCurves,1,mpi_integer,0,mpi_comm_world,ios) ! Number of light curves to all child processes
-if(proc /= 0) allocate(LightCurveFiles(number_LightCurves),PhasePlotFiles(number_LightCurves),AmplitudeSpectraFiles(number_LightCurves)) ! array allocations on child processes
+if(proc /= 0) allocate(LightCurveFiles(number_LightCurves),PhasePlotFiles(number_LightCurves),AmplitudeSpectraFiles(number_LightCurves),OutputPlots(number_LightCurves)) ! array allocations on child processes
 
 do i = 1, number_LightCurves ! loop over the number of light curves
  call mpi_bcast(LightCurveFiles(i),len(LightCurveFiles(i)),mpi_character,0,mpi_comm_world,ios) ! light curve file names to all child processes
  call mpi_bcast(PhasePlotFiles(i),len(PhasePlotFiles(i)),mpi_character,0,mpi_comm_world,ios) ! phase curve file names to all child processes
  call mpi_bcast(AmplitudeSpectraFiles(i),len(AmplitudeSpectraFiles(i)),mpi_character,0,mpi_comm_world,ios) ! amplitude spectra file names to al child processes
+ call mpi_bcast(OutputPlots(i),len(OutputPlots(i)),mpi_character,0,mpi_comm_world,ios) ! phase curve file names to all child processes
 enddo
 
 write(OutFile,"(a,'lcparam-',a,'_proc',i4.4,'.dat')") trim(adjustl(OutDir)), trim(adjustl(RunName)), proc ! Output file where the attributes per light curve will be stored

@@ -90,6 +90,7 @@ do i = 1, number_LightCurves ! Loop over the number of light curves
  Attributes(i,ncounter+8) = dlog10((TotalPower(i)/PowerEven(i)) - 1.d0) ! transformed odd power fraction, TotalPower is the sum of all squared amplitudes of all frequencies and PowerEven equals the total even power (sum of squares of all cosine amplitudes)
  Attributes(i,ncounter+9) = LightCurveParameters(i,CounterLightCurveParameters+3) ! Skewness in time domain
  Attributes(i,ncounter+10) = LightCurveParameters(i,CounterLightCurveParameters+4) ! Number of zero crossings in time domain
+ Attributes(i,ncounter+11) = LightCurveParameters(i,CounterLightCurveParameters+5) ! Ratio of magnitudes/fluxes that are either brighter/larger than or fainter/smaller than the mean magnitude/flux
  
 enddo
 

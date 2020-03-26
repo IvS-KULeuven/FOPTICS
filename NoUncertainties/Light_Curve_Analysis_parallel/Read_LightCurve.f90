@@ -20,7 +20,7 @@ do
  if(ios /= 0) exit ! Exit once hit the end-of-file record 
  k = 0; k = index(arg,'#') ! Check whether the entry in question contains a comment
  if(k /= 0) cycle ! Proceed to the next entry should the one in question contain a comment
-k = 0; k = index(arg,"nan"); k1 = 0; k1 = index(arg,"Nan"); k2 = 0; k2 = index(arg,"NAN")
+ k = 0; k = index(arg,"nan"); k1 = 0; k1 = index(arg,"Nan"); k2 = 0; k2 = index(arg,"NAN")
  if(k /= 0 .or. k1 /= 0 .or. k2 /= 0) cycle
  k = 0; k = index(arg,"inf"); k1 = 0; k1 = index(arg,"Inf"); k2 = 0; k2 = index(arg,"INF")
  if(k /= 0 .or. k1 /= 0 .or. k2 /= 0) cycle
@@ -42,7 +42,7 @@ do
  if(ios /= 0) exit ! Exit once hit the end-of-file record 
  k = 0; k = index(arg,'#') ! Check whether the entry in question contains a comment
  if(k /= 0) cycle ! Proceed to the next entry should the one in question contain a comment
-k = 0; k = index(arg,"nan"); k1 = 0; k1 = index(arg,"Nan"); k2 = 0; k2 = index(arg,"NAN")
+ k = 0; k = index(arg,"nan"); k1 = 0; k1 = index(arg,"Nan"); k2 = 0; k2 = index(arg,"NAN")
  if(k /= 0 .or. k1 /= 0 .or. k2 /= 0) cycle
  k = 0; k = index(arg,"inf"); k1 = 0; k1 = index(arg,"Inf"); k2 = 0; k2 = index(arg,"INF")
  if(k /= 0 .or. k1 /= 0 .or. k2 /= 0) cycle

@@ -7,7 +7,8 @@ real(8) func(ndeg+1,ntimes), ap(ndeg+1,ndeg+1), bp(ndeg+1), polyn(ntimes) ! Some
 
 call poly(ntimes,times,func,ndeg) ! Prepare intermediates of the polynomial
 call linfit(ntimes,ndeg+1,flux,weights,func,ap,bp) ! The following three subroutines are responsible for calculation of least-squares fits
-call ludcmp(ap,ndeg+1,ndeg+1,indxP)
+call ludcmp(ap,ndeg+1,ndeg+1,indxP,ierr)
+if(ierr /= 0) return
 call lubksb(ap,ndeg+1,ndeg+1,indxP,bp)
 
 polyn = 0.d0 ! Compute polynomial

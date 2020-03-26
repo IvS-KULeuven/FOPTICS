@@ -1,4 +1,4 @@
-2*NumberFrequencies + 2*NumberFrequencies*NumberHarmonics + 9 = NumberAttributes are computed and saved into a file. On top of that, NumberFrequencies+1 probability values are saved along with the file names of all light curves (which give an extra column)
+2*NumberFrequencies + 2*NumberFrequencies*NumberHarmonics + 10 = NumberAttributes are computed and saved into a file. On top of that, NumberFrequencies+1 probability values are saved along with the file names of all light curves (which give an extra column)
 
 The attributes computed are (general case):
 
@@ -11,7 +11,7 @@ The attributes computed are (general case):
   enddo
 * do i = 1, NumberFrequencies
    do j = 1, NumberHarmonics
-    amplitude(i,j) (magnitude) ! amplitude of the jth harmonic of the frequency fi
+    amplitude(i,j) ! amplitude of the jth harmonic of the frequency fi
    enddo
   enddo
 * do j = 1, NumberHarmonics-1
@@ -22,7 +22,7 @@ The attributes computed are (general case):
     phasediff(i,j) (radians) ! phase of the amplitude of the jth harmonic of the frequency fi (amplitude_ji) if the phase of amplitude_11 = 0
    enddo
   enddo
-* 'trend': slope of the linear trend (magnitude/day)
+* 'trend': slope of the linear trend
 * 'varrat': ratio of the variance after, to the variance before subtraction of least-squares fit with NumberHarmonics harmonics of 'f1' (values between 0 and 1)
 * 'varred': final variance reduction due to subtraction of all the periodic signals (values close to 1 if the fit is good, close to 0 if the fit is poor)
 * 'lf1f2': log10(f1/f2)
@@ -32,6 +32,7 @@ The attributes computed are (general case):
 * 'lpodd': log10((TOTP/PE)-1.d0), transformed odd power fraction, TOTP (total power) is the sum of all squared amplitudes of all frequencies and PE equals the total even power (sum of squares of all cosine amplitudes)
 * Skewness in time domain
 * Number of zero crossings in time domain
+* Ratio of the squared sum of residuals of magnitudes/fluxes that are either brighter/larger than or fainter/smaller than the mean magnitude/flux (A = sigma_faint/sigma_bright, where sigma^2 = (1/N)*sum_i^N{(m_i - mean)**2})
 
 Example for 3 frequencies and 4 harmonics:
 
@@ -42,18 +43,18 @@ Example for 3 frequencies and 4 harmonics:
 5)'lf1': log10 of the main frequency present in the light curve (cycles/day)
 6)'lf2': log10 of the second frequency present in the light curve (cycles/day)
 7)'lf3': log10 of the third frequency present in the light curve (cycles/day)
-8)'amp11': amplitude of the 1th harmonic of 'f1' (magnitude)
-9)'amp12': amplitude of the 2th harmonic of 'f1' (mag)
-10)'amp13': amplitude of the 3th harmonic of 'f1' (mag)
-11)'amp14': amplitude of the 4th harmonic of 'f1' (mag)
-12)'amp21': amplitude of the 1th harmonic of 'f2' (mag)
-13)'amp22': amplitude of the 2th harmonic of 'f2' (mag)
-14)'amp23': amplitude of the 3th harmonic of 'f2' (mag)
-15)'amp24': amplitude of the 4th harmonic of 'f2' (mag)
-16)'amp31': amplitude of the 1th harmonic of 'f3' (mag)
-17)'amp32': amplitude of the 2th harmonic of 'f3' (mag)
-18)'amp33': amplitude of the 3th harmonic of 'f3' (mag)
-19)'amp34': amplitude of the 4th harmonic of 'f3' (mag)
+8)'amp11': amplitude of the 1th harmonic of 'f1'
+9)'amp12': amplitude of the 2th harmonic of 'f1'
+10)'amp13': amplitude of the 3th harmonic of 'f1'
+11)'amp14': amplitude of the 4th harmonic of 'f1'
+12)'amp21': amplitude of the 1th harmonic of 'f2'
+13)'amp22': amplitude of the 2th harmonic of 'f2'
+14)'amp23': amplitude of the 3th harmonic of 'f2'
+15)'amp24': amplitude of the 4th harmonic of 'f2'
+16)'amp31': amplitude of the 1th harmonic of 'f3'
+17)'amp32': amplitude of the 2th harmonic of 'f3'
+18)'amp33': amplitude of the 3th harmonic of 'f3'
+19)'amp34': amplitude of the 4th harmonic of 'f3'
 20)'phdiff12': phase of 'amp12', if the phase of 'amp11'=0 (radians)
 21)'phdiff13': phase of 'amp13', if the phase of 'amp11'=0 (radians)
 22)'phdiff14': phase of 'amp14', if the phase of 'amp11'=0 (radians)
@@ -65,7 +66,7 @@ Example for 3 frequencies and 4 harmonics:
 28)'phdiff32': phase of 'amp32', if the phase of 'amp11'=0 (radians)
 29)'phdiff33': phase of 'amp33', if the phase of 'amp11'=0 (radians)
 30)'phdiff34': phase of 'amp34', if the phase of 'amp11'=0 (radians)
-31)'trend': slope of the linear trend (magnitude/day)
+31)'trend': slope of the linear trend
 32)'varrat': ratio of the variance after, to the variance before subtraction of least-squares fit with 4 harmonics of 'f1' (values between 0 and 1)
 33)'varred': final variance reduction due to subtraction of all the periodic signals (values close to 1 if the fit is good, close to 0 if the fit is poor)
 34)'lf1f2': log10(f1/f2)
@@ -75,3 +76,4 @@ Example for 3 frequencies and 4 harmonics:
 38)'lpodd': log10((TOTP/PE)-1.d0), transformed odd power fraction, TOTP (total power) is the sum of all squared amplitudes of all frequencies and PE equals the total even power (sum of squares of all cosine amplitudes)
 39) Skewness in time domain
 40) NumberZeroCrossings
+41) Ratio of magnitudes/fluxes that are either brighter/larger than or fainter/smaller than the mean magnitude/flux
