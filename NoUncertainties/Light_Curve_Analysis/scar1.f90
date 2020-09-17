@@ -6,7 +6,7 @@ IMPLICIT REAL(8) (A-H,O-Z)
 
 DATA TWOPI, DTWO, DNUL/6.28318530717959D0,2.0D0,0.0D0/
 
-F = FrequencyResolution
+F = FrequencyResolution*5.d0
 TPF = TWOPI * F
 TDF = TWOPI * FrequencyStep
 TN = real(ntimes,8)

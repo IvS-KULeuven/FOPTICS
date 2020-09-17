@@ -67,30 +67,37 @@ do i = 1, number_LightCurves ! Loop over the number of light curves
  enddo
 enddo
 CounterLightCurveParameters = CounterLightCurveParameters + 2*ProductFrequenciesHarmonics ! Accounts for cos and sin coefficients of NumberFrequencies and their NumberHarmonics
-CounterLightCurveParameters = CounterLightCurveParameters + 1 ! Accounts for variance in the time series, after linear trend-subtraction (mag^2)
-CounterLightCurveParameters = CounterLightCurveParameters + NumberFrequencies ! Accounts for variance in the time series after addition subtraction of lest-squares fit with NumberHarmonics harmonics of each frequency
+!CounterLightCurveParameters = CounterLightCurveParameters + 1 ! Accounts for variance in the time series, after linear trend-subtraction (mag^2)
+!CounterLightCurveParameters = CounterLightCurveParameters + NumberFrequencies ! Accounts for variance in the time series after additional subtraction of lest-squares fit with NumberHarmonics harmonics of each frequency
 
 ! Last patch of attributes
 ncounter = 2*NumberFrequencies + 2*ProductFrequenciesHarmonics - 1
 do i = 1, number_LightCurves ! Loop over the number of light curves
  Attributes(i,ncounter+1) = LightCurveParameters(i,2) ! Slope of linear trend
- Attributes(i,ncounter+2) = LightCurveParameters(i,CounterLightCurveParameters+1) ! ratio of the variance after, to the variance before subtraction of least-squares fit with 4 harmonics of 'f1' (values between 0 and 1)
- Attributes(i,ncounter+3) = LightCurveParameters(i,CounterLightCurveParameters+2) ! final variance reduction due to subtraction of all the periodic signals (values close to 1 if the fit is good, close to 0 if the fit is poor)
+
+ Attributes(i,ncounter+2) = LightCurveParameters(i,CounterLightCurveParameters+1) ! variance before trend subtraction
+ Attributes(i,ncounter+3) = LightCurveParameters(i,CounterLightCurveParameters+2) ! variance after trend subtraction
+ Attributes(i,ncounter+4) = LightCurveParameters(i,CounterLightCurveParameters+3) ! variance after the first frequency and its harmonics subtraction
+ Attributes(i,ncounter+5) = LightCurveParameters(i,CounterLightCurveParameters+4) ! variance after the second frequency and its harmonics subtraction
+ Attributes(i,ncounter+6) = LightCurveParameters(i,CounterLightCurveParameters+5) ! variance after the third frequency and its harmonics subtraction
+
+ Attributes(i,ncounter+7) = LightCurveParameters(i,CounterLightCurveParameters+6) ! ratio of the variance after, to the variance before subtraction of least-squares fit with 4 harmonics of 'f1' (values between 0 and 1)
+ Attributes(i,ncounter+8) = LightCurveParameters(i,CounterLightCurveParameters+7) ! final variance reduction due to subtraction of all the periodic signals (values close to 1 if the fit is good, close to 0 if the fit is poor)
 ! Attributes(i,ncounter+4) = LightCurveParameters(i,CounterLightCurveParameters+3) ! variance reduction difference between subtraction of the actual frequency and its sub-harmonic. This is relevant for the first extracted frequency only, hence for correct identification of the true orbital frequency of binary stars. Value is in percent.
- Attributes(i,ncounter+4) = dlog10(Attributes(i,1)/Attributes(i,2)) ! Log(f1/f2)
+ Attributes(i,ncounter+9) = dlog10(Attributes(i,1)/Attributes(i,2)) ! Log(f1/f2)
 
  if(Attributes(i,2*NumberFrequencies+2) /= 0.d0) then ! Log(amp11/amp12)
-  Attributes(i,ncounter+5) = dlog10(Attributes(i,2*NumberFrequencies+1)/Attributes(i,2*NumberFrequencies+2))
+  Attributes(i,ncounter+10) = dlog10(Attributes(i,2*NumberFrequencies+1)/Attributes(i,2*NumberFrequencies+2))
  else
-  Attributes(i,ncounter+5) = 9999.99999999d0
+  Attributes(i,ncounter+10) = 9999.99999999d0
  endif
  
- Attributes(i,ncounter+6) = dlog10((PowerFrequency(i,1)/Attributes(i,2*NumberFrequencies+1)**2.d0) - 1.d0) ! Log((Pf1/amp11**2)-1), with Pf1=(amp11**2+amp12**2+amp13**2+amp14**2)
- Attributes(i,ncounter+7) = dlog10(Attributes(i,2*NumberFrequencies+1)/Attributes(i,2*NumberFrequencies+1+NumberHarmonics)) ! Log(amp11/amp21)
- Attributes(i,ncounter+8) = dlog10((TotalPower(i)/PowerEven(i)) - 1.d0) ! transformed odd power fraction, TotalPower is the sum of all squared amplitudes of all frequencies and PowerEven equals the total even power (sum of squares of all cosine amplitudes)
- Attributes(i,ncounter+9) = LightCurveParameters(i,CounterLightCurveParameters+3) ! Skewness in time domain
- Attributes(i,ncounter+10) = LightCurveParameters(i,CounterLightCurveParameters+4) ! Number of zero crossings in time domain
- Attributes(i,ncounter+11) = LightCurveParameters(i,CounterLightCurveParameters+5) ! Ratio of magnitudes/fluxes that are either brighter/larger than or fainter/smaller than the mean magnitude/flux
+ Attributes(i,ncounter+11) = dlog10((PowerFrequency(i,1)/Attributes(i,2*NumberFrequencies+1)**2.d0) - 1.d0) ! Log((Pf1/amp11**2)-1), with Pf1=(amp11**2+amp12**2+amp13**2+amp14**2)
+ Attributes(i,ncounter+12) = dlog10(Attributes(i,2*NumberFrequencies+1)/Attributes(i,2*NumberFrequencies+1+NumberHarmonics)) ! Log(amp11/amp21)
+ Attributes(i,ncounter+13) = dlog10((TotalPower(i)/PowerEven(i)) - 1.d0) ! transformed odd power fraction, TotalPower is the sum of all squared amplitudes of all frequencies and PowerEven equals the total even power (sum of squares of all cosine amplitudes)
+ Attributes(i,ncounter+14) = LightCurveParameters(i,CounterLightCurveParameters+8) ! Skewness in time domain
+ Attributes(i,ncounter+15) = LightCurveParameters(i,CounterLightCurveParameters+9) ! Number of zero crossings in time domain
+ Attributes(i,ncounter+16) = LightCurveParameters(i,CounterLightCurveParameters+10) ! Ratio of magnitudes/fluxes that are either brighter/larger than or fainter/smaller than the mean magnitude/flux
  
 enddo
 

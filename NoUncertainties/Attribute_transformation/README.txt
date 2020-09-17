@@ -1,4 +1,4 @@
-2*NumberFrequencies + 2*NumberFrequencies*NumberHarmonics + 10 = NumberAttributes are computed and saved into a file. On top of that, NumberFrequencies+1 probability values are saved along with the file names of all light curves (which give an extra column)
+2*NumberFrequencies + 2*NumberFrequencies*NumberHarmonics + 15 = NumberAttributes are computed and saved into a file. On top of that, NumberFrequencies+1 probability values are saved along with the file names of all light curves (which give an extra column)
 
 The attributes computed are (general case):
 
@@ -23,6 +23,11 @@ The attributes computed are (general case):
    enddo
   enddo
 * 'trend': slope of the linear trend
+* Variance in the time series, before trend subtraction
+* Variance in the time series, after trend subtraction
+* do i = 1, NumberFrequencies
+   variance(i) ! variance in the time series after additional subtraction of lest-squares fit with NumberHarmonics harmonics of the frequency in question
+  enddo
 * 'varrat': ratio of the variance after, to the variance before subtraction of least-squares fit with NumberHarmonics harmonics of 'f1' (values between 0 and 1)
 * 'varred': final variance reduction due to subtraction of all the periodic signals (values close to 1 if the fit is good, close to 0 if the fit is poor)
 * 'lf1f2': log10(f1/f2)
@@ -67,13 +72,18 @@ Example for 3 frequencies and 4 harmonics:
 29)'phdiff33': phase of 'amp33', if the phase of 'amp11'=0 (radians)
 30)'phdiff34': phase of 'amp34', if the phase of 'amp11'=0 (radians)
 31)'trend': slope of the linear trend
-32)'varrat': ratio of the variance after, to the variance before subtraction of least-squares fit with 4 harmonics of 'f1' (values between 0 and 1)
-33)'varred': final variance reduction due to subtraction of all the periodic signals (values close to 1 if the fit is good, close to 0 if the fit is poor)
-34)'lf1f2': log10(f1/f2)
-35)'la11a12': log10(amp11/amp12)
-36)'lpf1pa11': log10(((Pf1/amp11**2)-1), with Pf1=(amp11**2+amp12**2+amp13**2+amp14**2)
-37)'lpa11pa21': log10(a11/a21)
-38)'lpodd': log10((TOTP/PE)-1.d0), transformed odd power fraction, TOTP (total power) is the sum of all squared amplitudes of all frequencies and PE equals the total even power (sum of squares of all cosine amplitudes)
-39) Skewness in time domain
-40) NumberZeroCrossings
-41) Ratio of magnitudes/fluxes that are either brighter/larger than or fainter/smaller than the mean magnitude/flux
+32)Variance in the time series, before trend subtraction
+33)Variance in the time series, after trend subtraction
+34-36)do i = 1, NumberFrequencies
+       variance(i) ! variance in the time series after additional subtraction of lest-squares fit with NumberHarmonics harmonics of the frequency in question
+      enddo
+37)'varrat': ratio of the variance after, to the variance before subtraction of least-squares fit with 4 harmonics of 'f1' (values between 0 and 1)
+38)'varred': final variance reduction due to subtraction of all the periodic signals (values close to 1 if the fit is good, close to 0 if the fit is poor)
+39)'lf1f2': log10(f1/f2)
+40)'la11a12': log10(amp11/amp12)
+41)'lpf1pa11': log10(((Pf1/amp11**2)-1), with Pf1=(amp11**2+amp12**2+amp13**2+amp14**2)
+42)'lpa11pa21': log10(a11/a21)
+43)'lpodd': log10((TOTP/PE)-1.d0), transformed odd power fraction, TOTP (total power) is the sum of all squared amplitudes of all frequencies and PE equals the total even power (sum of squares of all cosine amplitudes)
+44) Skewness in time domain
+45) NumberZeroCrossings
+46) Ratio of magnitudes/fluxes that are either brighter/larger than or fainter/smaller than the mean magnitude/flux

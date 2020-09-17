@@ -22,7 +22,6 @@ do k = 1, NumberPerturbations ! Loop over the number of perturbations
   enddo
   ObjectIndexInEpsilon(NumberObjectsEpsilon) = i ! Save index of the processed object in the neighborhood
  enddo
-
 ! Core distance of an object is equal to the MinimumNumberPointsEpsilon-th closest object's epsilon neighborhood distance to that object, provided that there is such an object within the epsilon neighborhood (else the core distance is undefined).
       
  if(NumberObjectsEpsilon < MinimumNumberPointsEpsilon) then ! Core distance is undefined when the number of objects in the neighborhood is lower than the pre-defined minimum
