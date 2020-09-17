@@ -62,6 +62,9 @@ do iper = 1, NumberPerturbations ! Loop over the number of attribute files
   k = 0; k = index(arg,'/',back=.true.); kk = 0; kk = index(arg,' ') ! Get some indices to extract object name from the string
   read(arg(k+1:kk),'(a)') ObjectID(iobject); read(arg(kk+1:),*) (Attributes(iobject,ia,iper), ia = 1, NumberAttributes) ! Get the object ID and the associated attributes
   if(iper == 1) ObjectOrder(iobject) = iobject
+  do ia = 1, NumberAttributes
+   if(Attributes(1,ia,iper) == 0.0) Attributes(1,ia,iper) = 1.d-5
+  enddo
  enddo
  close(1)
 

@@ -58,7 +58,7 @@ do ! Infinite loop over the number of attribute files; it will be broken once al
   enddo
   k = 0; k = index(string,trim(adjustl(FileExt)),back=.true.); k = k + len(trim(adjustl(FileExt))) ! Identify end of string and beginning of float numbers in a file line
   read(string(1:k),"(a)") star_ID; read(string(k+1:),*) (Attributes(i), i = 1, NumberAttributes) ! Read data from the attribute file
-!  Attributes(1) = dlog10(Attributes(1))
+  Attributes(1) = dlog10(Attributes(1))
 
   string = ' '; write(string,"(a)") trim(adjustl(star_ID)) ! Write star id into a string
   do i = 1, NumberSelectedAttributes ! Loop over the number of selected attributes

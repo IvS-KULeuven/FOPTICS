@@ -1,6 +1,7 @@
 use foptics_module
 implicit real(8) (a-h,o-z)
 
+call cpu_time(start)
 call foptics_input ! subroutine to get all the input
 
 call optics ! run the optics algorithm
@@ -22,5 +23,7 @@ enddo
 close(10)
 
 deallocate(ObjectID,ObjectOrder,MinimumMeanReachabilityDistance,ObjectOrderIndex)
+call cpu_time(finish)
+write(*,"('Run time = ',f6.3,' seconds')") finish-start
 
 end

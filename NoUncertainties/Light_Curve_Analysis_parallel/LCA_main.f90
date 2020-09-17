@@ -155,7 +155,7 @@ call PhasePlot(il,skewness_phase_mean,skewness_phase_median) ! Make a phase plot
  
 write(10,fmt="(a,'   0.00000000     0.00000000  ',1000(f16.8,1x))") trim(adjustl(LightCurveFiles(il))), (FrequenciesExtracted(i), i = 1, NumberFrequenciesExtract), & ! Output
          FittingCoefficientsPerFrequency(1,1), (FittingCoefficientsPerFrequency(i,2:NumberHarmonics+1), i = 1, NumberFrequenciesExtract), &
-         (FittingCoefficientsPerFrequency(i,NumberHarmonics+2:TwiceNumberHarmonics), i = 1, NumberFrequenciesExtract), (Variance(i), i = 1, NumberFrequenciesExtract+1), &
+         (FittingCoefficientsPerFrequency(i,NumberHarmonics+2:TwiceNumberHarmonics), i = 1, NumberFrequenciesExtract), VarianceRaw, (Variance(i), i = 1, NumberFrequenciesExtract+1), &
          Variance(2)/Variance(1), (1.d0 - Variance(NumberFrequenciesExtract+1)/Variance(1)), skewness_time_mean, real(NumberZeroCrossings,8)/real(ntimes,8), &
          FluxRatio, (FrequencyProbability(i), i = 1, NumberFrequenciesExtract+1) 
 write(500,"('Light curve ',a,' has been processed')") trim(adjustl(LightCurveFiles(il))) ! Print some info
